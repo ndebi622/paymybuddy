@@ -1,0 +1,37 @@
+services:
+
+  registry:
+    image: registry:2
+    container_name: private-registry
+
+    ports:
+      - "5001:5000"
+
+    volumes:
+      - registry-data:/var/lib/registry
+
+    networks:
+      - registry-network
+
+  registry-ui:
+    image: joxit/docker-registry-ui:latest
+    container_name: registry-ui
+
+    environment:
+      REGISTRY_TITLE: "PAYMYBUDDY Registry"
+      SINGLE_REGISTRY: "true"
+      DELETE_IMAGES: "true"
+      NGINX_PROXY_PASS_URL: http://registry:5000
+
+    ports:
+      - "8081:80"
+
+    networks:
+      - registry-network
+
+volumes:
+  registry-data:
+
+networks:
+  registry-network:
+

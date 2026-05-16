@@ -1,1 +1,41 @@
+services:
+
+  paymybuddy-backend:
+    image: paymybuddy-backend
+    container_name: paymybuddy-backend
+
+    depends_on:
+      - mysql_paybuddy
+
+    env_file:
+      - .env
+
+    ports:
+      - "8080:8080"
+
+    networks:
+      - paymybuddy-network
+
+  mysql_paybuddy:
+    image: mysql:latest
+    container_name: mysql_paybuddy
+
+    env_file:
+      - .env
+
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./initdb:/docker-entrypoint-initdb.d
+
+    ports:
+      - "3306:3306"
+
+    networks:
+      - paymybuddy-network
+
+volumes:
+  mysql_data:
+
+networks:
+  paymybuddy-network:
 
